@@ -1,0 +1,29 @@
+ena
+conf ter
+hostname S3
+ip routing
+
+vlan 60
+name PRODUCCION 
+exit
+vlan 70
+name VENTAS
+exit
+
+int e0/0
+switchport trunk encapsulation dot1q
+sw m t
+sw t all vl 60,70
+exit
+
+int r e1/0-3
+sw m ac
+sw ac vl 60
+exit
+
+int r e2/0-3
+sw m ac
+sw ac vl 70
+exit
+
+*do copy run start

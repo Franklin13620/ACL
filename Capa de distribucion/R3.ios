@@ -1,0 +1,75 @@
+ena
+conf ter
+hostname R3
+
+line console 0
+password franklin072517
+login
+exit
+
+ip domain-name ftorres.com
+username admin privilege 4 secret adminadmin
+crypto key generate rsa modulus 1024
+ip ssh version 2
+line vty 0 4
+  transport input ssh
+  login local
+exit
+service password-encryption
+
+
+ip dhcp pool ADMINISTRACION
+network 172.25.2.0 255.255.255.0
+default-router 172.25.2.1
+exit
+ip dhcp pool SOPORTE
+network 172.25.3.0 255.255.255.0
+default-router 172.25.3.1
+exit
+
+int e1/0
+ip add 192.25.10.9 255.255.255.252
+ip ospf message-digest-key 51 md5 ftorres.com
+ip access-group 1 in
+ip access-group 103 out
+no shu
+exit
+
+int e1/1
+no shu
+int e1/1.30
+encapsulation dot1q 30
+ip add 172.25.2.1 255.255.255.0
+ip ospf message-digest-key 51 md5 ftorres.com
+exit
+int e1/1.80
+encapsulation dot1q 80
+ip add 172.25.3.1 255.255.255.0
+ip ospf message-digest-key 51 md5 ftorres.com
+exit
+
+router ospf 25
+router-id 3.3.3.3
+network 192.25.10.8 0.0.0.3 area 51
+network 172.25.2.0 0.0.0.255 area 51
+network 172.25.3.0 0.0.0.255 area 51
+area 51 authentication message-digest
+exit
+
+ip access-list standard 1
+deny 192.25.2.0 0.0.0.3
+deny 192.25.3.0 0.0.0.3
+deny 192.25.4.0 0.0.0.3
+deny 192.25.5.0 0.0.0.3
+deny 192.25.6.0 0.0.0.3
+deny 192.25.7.0 0.0.0.3
+deny 192.25.8.0 0.0.0.3
+deny 192.25.9.0 0.0.0.3
+permit any
+
+ip access-list extended 103
+deny tcp 172.168.2.0 0.0.0.0 any eq 22
+deny tcp 172.168.2.0 0.0.0.0 any eq 23
+permit ip any any
+
+*do copy run start

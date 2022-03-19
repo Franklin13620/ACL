@@ -1,0 +1,29 @@
+ena
+conf ter
+hostname S5
+ip routing
+
+vlan 30
+name ADMINISTRACION 
+exit
+vlan 80
+name SOPORTE
+exit
+
+int e0/0
+switchport trunk encapsulation dot1q
+sw m t
+sw t all vl 30,80
+exit
+
+int r e1/0-3
+sw m ac
+sw ac vl 30
+exit
+
+int r e2/0-3
+sw m ac
+sw ac vl 80
+exit
+
+*do copy run start

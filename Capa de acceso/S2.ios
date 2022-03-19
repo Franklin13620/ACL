@@ -1,0 +1,29 @@
+ena
+conf ter
+hostname S2
+ip routing
+
+vlan 40
+name HACIENDA 
+exit
+vlan 50
+name RRHH
+exit
+
+int e0/0
+switchport trunk encapsulation dot1q
+sw m t
+sw t all vl 40,50
+exit
+
+int r e1/0-3
+sw m ac
+sw ac vl 40
+exit
+
+int r e2/0-3
+sw m ac
+sw ac vl 50
+exit
+
+*do copy run start

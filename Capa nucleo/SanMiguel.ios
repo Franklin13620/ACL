@@ -1,0 +1,32 @@
+ena
+conf ter
+hostname SanMiguel
+
+int e0/0
+ip add 209.25.100.1 255.255.255.0
+ip ospf message-digest-key 0 md5 ftorres.com
+no shu
+exit
+
+int e0/1
+ip add 192.25.10.2 255.255.255.252
+ip ospf message-digest-key 50 md5 ftorres.com
+no shu
+exit
+
+int e0/2
+ip add 192.25.10.6 255.255.255.252
+ip ospf message-digest-key 50 md5 ftorres.com
+no shu
+exit
+
+router ospf 25
+router-id 6.6.6.6
+network 209.25.100.0 0.0.0.255 area 0
+network 192.25.10.0 0.0.0.3 area 50
+network 192.25.10.4 0.0.0.3 area 50
+area 0 authentication message-digest
+area 50 authentication message-digest
+exit
+
+*do copy run start

@@ -1,0 +1,29 @@
+ena
+conf ter
+hostname S4
+ip routing
+
+vlan 80
+name SOPORTE 
+exit
+vlan 90
+name CONTRATACIONES
+exit
+
+int e0/0
+switchport trunk encapsulation dot1q
+sw m t
+sw t all vl 80,90
+exit
+
+int r e1/0-3
+sw m ac
+sw ac vl 80
+exit
+
+int r e2/0-3
+sw m ac
+sw ac vl 90
+exit
+
+*do copy run start

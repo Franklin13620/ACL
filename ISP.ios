@@ -1,0 +1,24 @@
+ena
+conf ter
+hostname ISP
+
+int e1/1 
+ip add 192.168.1.253 255.255.255.0
+ip access-group 102 in
+no shu
+exit
+
+int e1/0
+ip add 168.25.3.2 255.255.255.248
+no shu
+exit
+
+ip route 0.0.0.0 0.0.0.0 168.25.3.1
+
+ip access-list extended 102
+deny icmp host 192.168.1.99 any
+deny icmp host 192.168.1.101 any
+permit ip any any
+
+
+*do copy run start

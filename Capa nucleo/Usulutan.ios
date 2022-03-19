@@ -1,0 +1,25 @@
+ena
+conf ter
+hostname Usulutan
+
+int e0/0
+ip add 209.25.100.3 255.255.255.0
+ip ospf message-digest-key 0 md5 ftorres.com
+no shu
+exit
+
+int e0/1
+ip add 192.25.10.10 255.255.255.252
+ip ospf message-digest-key 51 md5 ftorres.com
+no shu
+exit
+
+router ospf 25
+router-id 5.5.5.5
+network 209.25.100.0 0.0.0.255 area 0
+network 192.25.10.8 0.0.0.3 area 51
+area 0 authentication message-digest
+area 51 authentication message-digest
+exit
+
+*do copy run start
